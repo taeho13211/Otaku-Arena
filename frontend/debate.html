@@ -6,6 +6,7 @@
     <title>토론방 | Otaku Arena</title>
     <link rel="stylesheet" href="./style.css" />
     <script src="./js/common.js" defer></script>
+    <script src="./js/api.js" defer></script>
     <script src="./js/debate.js" defer></script>
   </head>
   <body>
@@ -33,6 +34,7 @@
           <p class="kicker">MY VOTE</p><h2>내 투표</h2><p class="vote-help">다른 쪽으로 투표를 바꾸면 설득된 것으로 집계됩니다.</p>
           <div class="vote-options"><button class="vote-option option-a" type="button" data-vote="a"><span>A</span><strong id="vote-name-a"></strong></button><button class="vote-option option-b" type="button" data-vote="b"><span>B</span><strong id="vote-name-b"></strong></button></div>
           <div class="persuaded"><span>설득 당함</span><strong id="persuaded-count">0</strong></div>
+          <p class="form-error" id="vote-error" role="alert"></p>
         </aside>
       </div>
     </main>

@@ -2,12 +2,12 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>회원가입 | Otaku Arena</title><link rel="stylesheet" href="./style.css" /><script src="./js/auth.js" defer></script>
+    <title>회원가입 | Otaku Arena</title><link rel="stylesheet" href="./style.css" /><script src="./js/api.js" defer></script><script src="./js/auth.js" defer></script>
   </head>
   <body>
     <header class="header"><a class="logo" href="./index.html">OTAKU ARENA</a><div class="auth-actions"><a class="button button-line" href="./login.html">로그인</a></div></header>
     <main class="container auth-view standalone-auth">
-      <form class="auth-card demo-form"><a class="close-button" href="./index.html" aria-label="닫기">×</a><p class="kicker">JOIN THE ARENA</p><h1>회원가입</h1><label>닉네임<input type="text" placeholder="토론에서 사용할 이름" required /></label><label>이메일<input type="email" placeholder="name@example.com" required /></label><label>비밀번호<input type="password" minlength="6" placeholder="6자 이상" required /></label><button class="button button-primary full" type="submit">회원가입</button><p class="switch-text">이미 계정이 있나요? <a href="./login.html">로그인</a></p></form>
+      <form class="auth-card" id="signup-form"><a class="close-button" href="./index.html" aria-label="닫기">×</a><p class="kicker">JOIN THE ARENA</p><h1>회원가입</h1><label>닉네임<input id="nickname" type="text" placeholder="토론에서 사용할 이름" required /></label><label>이메일<input id="email" type="email" placeholder="name@example.com" required /></label><label>비밀번호<input id="password" type="password" minlength="6" placeholder="6자 이상" required /></label><p class="form-error" id="form-error" role="alert"></p><button class="button button-primary full" type="submit">회원가입</button><p class="switch-text">이미 계정이 있나요? <a href="./login.html">로그인</a></p></form>
     </main>
   </body>
 </html>
