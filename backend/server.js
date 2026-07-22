@@ -9,4 +9,4 @@ import authRoutes from "./routes/authRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 import regesterChatSocket from "./sockets/chatSocket/js";
 
-con;
+const __filename = fileURLToPath(import.meta.url);
