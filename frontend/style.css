@@ -94,13 +94,20 @@ input:focus, textarea:focus { border-color: var(--purple); }
 .chat-card header { height: 65px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .chat-card header h2, .vote-card h2 { margin: 0; font-size: 18px; }
 .chat-card header span { color: var(--sub); font-size: 12px; }
+.chat-card header span[data-state="connected"] { color: #16834d; }
+.chat-card header span[data-state="waiting"] { color: #a06600; }
+.chat-card header span[data-state="error"] { color: var(--red); }
 .messages { height: 330px; padding: 16px 20px; overflow-y: auto; }
 .system-message { padding: 10px; color: var(--sub); background: #f5f5f3; border-radius: 8px; text-align: center; font-size: 12px; }
+.system-message + .system-message { margin-top: 8px; }
+.system-message.is-error { color: #a82633; background: var(--red-soft); }
 .message { padding: 15px 0; display: grid; grid-template-columns: 9px 1fr auto; gap: 10px; border-bottom: 1px solid #eee; }
+.message.is-mine { background: #faf9ff; }
 .message p { margin: 5px 0 0; line-height: 1.5; }
 .message time { color: var(--sub); font-size: 11px; }
 .team-dot { width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: var(--blue); }
 .team-dot.red { background: var(--red); }
+.team-dot.neutral { background: #a3a3a3; }
 .chat-form { padding: 14px; display: flex; gap: 8px; border-top: 1px solid var(--line); }
 .chat-form input { flex: 1; min-width: 0; }
 .vote-card { padding: 22px; }

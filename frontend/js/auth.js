@@ -4,19 +4,23 @@ const formError = document.querySelector("#form-error");
 
 loginForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  await submitAuth(loginForm, () => window.OtakuArenaApi.login({
-    email: document.querySelector("#email").value.trim(),
-    password: document.querySelector("#password").value,
-  }));
+  await submitAuth(loginForm, () =>
+    window.OtakuArenaApi.login({
+      email: document.querySelector("#email").value.trim(),
+      password: document.querySelector("#password").value,
+    }),
+  );
 });
 
 signupForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  await submitAuth(signupForm, () => window.OtakuArenaApi.signup({
-    nickname: document.querySelector("#nickname").value.trim(),
-    email: document.querySelector("#email").value.trim(),
-    password: document.querySelector("#password").value,
-  }));
+  await submitAuth(signupForm, () =>
+    window.OtakuArenaApi.signup({
+      nickname: document.querySelector("#nickname").value.trim(),
+      email: document.querySelector("#email").value.trim(),
+      password: document.querySelector("#password").value,
+    }),
+  );
 });
 
 async function submitAuth(form, apiCall) {
@@ -25,7 +29,10 @@ async function submitAuth(form, apiCall) {
   submitButton.disabled = true;
 
   try {
-    await apiCall();
+    const user = await apiCall();
+
+    localStorage.setItem("currentUser", JSON.stringify(user));
+
     window.location.href = "./index.html";
   } catch (error) {
     formError.textContent = error.message;
