@@ -2,6 +2,8 @@ import { Router } from "express";
 
 const router = Router();
 const rooms = [];
+const votes = [];
+
 let nextRoomId = 1;
 
 //전체 조회
@@ -150,6 +152,96 @@ router.delete("/:roomId", (req, res) => {
   rooms.splice(roomIndex, 1);
 
   res.status(204).send();
+});
+
+//투표
+router.post("/:roomId/votes", (req, res) => {
+  const roomId = Number(req.params.roomId);
+  const { userId, candidate } = req.body;
+
+  const room = rooms.find((room) => {
+    return room.id === roomId;
+  });
+
+  if (!room) {
+    return res.status(404).json({
+      message: "토론방을 찾을 수 없습니다.",
+    });
+  }
+
+  if (!userId) {
+    return res.status(400).json({
+      message: "사용자 ID가 필요합니다.",
+    });
+  }
+
+  if (candidate !== "a" && candidate !== "b") {
+    return res.status(400).json({
+      message: "후보는 a 또는 b여야 합니다.",
+    });
+  }
+
+  const existingVote = votes.find((vote) => {
+    return vote.roomId === roomId && vote.userId === userId;
+  });
+
+  if (!existingVote) {
+    votes.push({
+      roomId,
+      userId,
+      candidate,
+    });
+
+    if (candidate === "a") {
+      room.voteCountA += 1;
+    } else {
+      room.voteCountB += 1;
+    }
+
+    return res.status(201).json({
+      currentVote: candidate,
+      votes: {
+        a: room.voteCountA,
+        b: room.voteCountB,
+      },
+      persuadedCount: room.persuadedCount,
+    });
+  }
+
+  if (existingVote.candidate === candidate) {
+    return res.json({
+      currentVote: candidate,
+      votes: {
+        a: room.voteCountA,
+        b: room.voteCountB,
+      },
+      persuadedCount: room.persuadedCount,
+    });
+  }
+
+  if (existingVote.candidate === "a") {
+    room.voteCountA -= 1;
+  } else {
+    room.voteCountB -= 1;
+  }
+
+  if (candidate === "a") {
+    room.voteCountA += 1;
+  } else {
+    room.voteCountB += 1;
+  }
+
+  existingVote.candidate = candidate;
+  room.persuadedCount += 1;
+
+  return res.json({
+    currentVote: candidate,
+    votes: {
+      a: room.voteCountA,
+      b: room.voteCountB,
+    },
+    persuadedCount: room.persuadedCount,
+  });
 });
 
 export default router;
