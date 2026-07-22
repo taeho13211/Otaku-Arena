@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>토론방 | Otaku Arena</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./js/common.js" defer></script>
+    <script src="./js/debate.js" defer></script>
+  </head>
+  <body>
+    <header class="header">
+      <a class="logo" href="./index.html">OTAKU ARENA</a>
+      <nav aria-label="주 메뉴"><a class="nav-item is-active" href="./index.html">토론</a><a class="nav-item" href="./create.html">토론 만들기</a></nav>
+      <div class="auth-actions"><a class="button button-line" href="./login.html">로그인</a><a class="button button-dark" href="./signup.html">회원가입</a></div>
+    </header>
+
+    <main class="container">
+      <div class="room-header"><a class="back-button" href="./index.html">← 토론 목록</a><div class="live-state"><span></span> LIVE</div></div>
+      <div class="room-title"><h1 id="room-topic"></h1><p id="room-description"></p></div>
+      <div class="versus-summary">
+        <div class="candidate candidate-a"><div class="initial" id="initial-a">A</div><strong id="room-candidate-a"></strong><b id="percent-a">50%</b></div>
+        <div class="versus-center"><span>VS</span><small id="total-votes">0표</small></div>
+        <div class="candidate candidate-b"><b id="percent-b">50%</b><strong id="room-candidate-b"></strong><div class="initial" id="initial-b">B</div></div>
+      </div>
+      <div class="debate-layout">
+        <section class="chat-card" aria-label="실시간 채팅">
+          <header><h2>실시간 채팅</h2><span>화면 동작용 데모</span></header>
+          <div class="messages" id="messages" aria-live="polite"><div class="system-message">선투표가 완료되었습니다. 첫 의견을 남겨보세요.</div></div>
+          <form class="chat-form" id="chat-form"><label class="sr-only" for="message-input">메시지</label><input id="message-input" maxlength="120" placeholder="의견을 입력하세요" autocomplete="off" /><button class="button button-dark" type="submit">전송</button></form>
+        </section>
+        <aside class="vote-card">
+          <p class="kicker">MY VOTE</p><h2>내 투표</h2><p class="vote-help">다른 쪽으로 투표를 바꾸면 설득된 것으로 집계됩니다.</p>
+          <div class="vote-options"><button class="vote-option option-a" type="button" data-vote="a"><span>A</span><strong id="vote-name-a"></strong></button><button class="vote-option option-b" type="button" data-vote="b"><span>B</span><strong id="vote-name-b"></strong></button></div>
+          <div class="persuaded"><span>설득 당함</span><strong id="persuaded-count">0</strong></div>
+        </aside>
+      </div>
+    </main>
+
+    <div class="modal-backdrop" id="pre-vote-modal" hidden>
+      <section class="pre-vote-modal" role="dialog" aria-modal="true" aria-labelledby="pre-vote-title">
+        <p class="step">토론방 입장 전</p><h2 id="pre-vote-title">먼저 투표해주세요.</h2><p>토론을 보기 전의 생각을 기록합니다.</p>
+        <div class="pre-vote-options"><button class="pre-vote-button pre-a" type="button" data-pre-vote="a"><span>A</span><strong id="pre-name-a"></strong></button><span>VS</span><button class="pre-vote-button pre-b" type="button" data-pre-vote="b"><span>B</span><strong id="pre-name-b"></strong></button></div>
+        <small>선택 후 바로 토론방에 입장합니다.</small>
+      </section>
+    </div>
+  </body>
+</html>

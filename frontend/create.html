@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>토론 만들기 | Otaku Arena</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./js/common.js" defer></script>
+    <script src="./js/create.js" defer></script>
+  </head>
+  <body>
+    <header class="header">
+      <a class="logo" href="./index.html">OTAKU ARENA</a>
+      <nav aria-label="주 메뉴">
+        <a class="nav-item" href="./index.html">토론</a>
+        <a class="nav-item is-active" href="./create.html">토론 만들기</a>
+      </nav>
+      <div class="auth-actions">
+        <a class="button button-line" href="./login.html">로그인</a>
+        <a class="button button-dark" href="./signup.html">회원가입</a>
+      </div>
+    </header>
+
+    <main class="container narrow-view">
+      <a class="back-button" href="./index.html">← 목록으로</a>
+      <div class="page-title">
+        <p class="kicker">CREATE DEBATE</p>
+        <h1>새 토론 만들기</h1>
+        <p>서로 비교할 두 캐릭터와 토론 주제를 입력하세요.</p>
+      </div>
+      <form class="form-card" id="create-form">
+        <label>토론 주제<input id="topic-input" type="text" maxlength="60" placeholder="예: 누가 더 좋은 리더인가요?" required /></label>
+        <div class="candidate-fields">
+          <label>캐릭터 A<input id="candidate-a-input" type="text" maxlength="24" placeholder="캐릭터 이름" required /></label>
+          <span class="form-vs">VS</span>
+          <label>캐릭터 B<input id="candidate-b-input" type="text" maxlength="24" placeholder="캐릭터 이름" required /></label>
+        </div>
+        <label>간단한 설명 <span class="optional">선택</span><textarea id="description-input" maxlength="160" placeholder="어떤 관점에서 토론하면 좋을지 적어주세요."></textarea></label>
+        <div class="form-actions">
+          <a class="button button-line" href="./index.html">취소</a>
+          <button class="button button-primary" type="submit">토론 생성</button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

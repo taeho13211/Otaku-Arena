@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Otaku Arena</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./js/common.js" defer></script>
+    <script src="./js/home.js" defer></script>
+  </head>
+  <body>
+    <header class="header">
+      <a class="logo" href="./index.html">OTAKU ARENA</a>
+      <nav aria-label="주 메뉴">
+        <a class="nav-item is-active" href="./index.html">토론</a>
+        <a class="nav-item" href="./create.html">토론 만들기</a>
+      </nav>
+      <div class="auth-actions">
+        <a class="button button-line" href="./login.html">로그인</a>
+        <a class="button button-dark" href="./signup.html">회원가입</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <section aria-labelledby="home-title">
+        <div class="home-heading">
+          <div>
+            <p class="kicker">1 VS 1 CHARACTER DEBATE</p>
+            <h1 id="home-title">어떤 캐릭터가<br />더 나은지 토론해보세요.</h1>
+            <p class="description">주제를 만들고, 먼저 투표한 뒤, 다른 사람의 의견을 실시간으로 확인하세요.</p>
+          </div>
+          <a class="button button-primary button-large" href="./create.html">새 토론 만들기</a>
+        </div>
+
+        <div class="list-heading">
+          <h2>진행 중인 토론</h2>
+          <span id="room-count">0개</span>
+        </div>
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">?</div>
+          <h3>아직 만들어진 토론이 없습니다.</h3>
+          <p>첫 번째 토론 주제를 만들어보세요.</p>
+          <a class="button button-dark" href="./create.html">토론 만들기</a>
+        </div>
+        <div class="room-list" id="room-list" aria-live="polite"></div>
+      </section>
+    </main>
+  </body>
+</html>
