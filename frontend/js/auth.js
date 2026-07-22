@@ -1,4 +1,34 @@
-document.querySelector(".demo-form").addEventListener("submit", (event) => {
+const loginForm = document.querySelector("#login-form");
+const signupForm = document.querySelector("#signup-form");
+const formError = document.querySelector("#form-error");
+
+loginForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  alert("현재는 프론트엔드 화면만 연결되어 있습니다.");
+  await submitAuth(loginForm, () => window.OtakuArenaApi.login({
+    email: document.querySelector("#email").value.trim(),
+    password: document.querySelector("#password").value,
+  }));
 });
+
+signupForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  await submitAuth(signupForm, () => window.OtakuArenaApi.signup({
+    nickname: document.querySelector("#nickname").value.trim(),
+    email: document.querySelector("#email").value.trim(),
+    password: document.querySelector("#password").value,
+  }));
+});
+
+async function submitAuth(form, apiCall) {
+  formError.textContent = "";
+  const submitButton = form.querySelector('[type="submit"]');
+  submitButton.disabled = true;
+
+  try {
+    await apiCall();
+    window.location.href = "./index.html";
+  } catch (error) {
+    formError.textContent = error.message;
+    submitButton.disabled = false;
+  }
+}
