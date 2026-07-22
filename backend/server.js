@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 
 import roomRoutes from "./routes/roomRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import registerChatSocket from "./sockets/chatSocket.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,13 +47,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-io.on("connection", (socket) => {
-  console.log(`소켓 연결: ${socket.id}`);
-
-  socket.on("disconnect", () => {
-    console.log(`소켓 연결 종료: ${socket.id}`);
-  });
-});
+registerChatSocket(io);
 
 const PORT = process.env.PORT || 3000;
 

@@ -1,11 +1,79 @@
 const roomId = new URLSearchParams(window.location.search).get("roomId");
+const currentUser = getCurrentUser();
+const chatForm = document.querySelector("#chat-form");
+const messageInput = document.querySelector("#message-input");
+const messages = document.querySelector("#messages");
+const chatStatus = document.querySelector("#chat-status");
 let room = null;
 let currentVote = null;
+let socket = null;
 
 if (!roomId) {
   window.location.replace("./index.html");
 } else {
   loadRoom();
+  connectChat();
+}
+
+function getCurrentUser() {
+  try {
+    return JSON.parse(localStorage.getItem("currentUser"));
+  } catch {
+    return null;
+  }
+}
+
+function connectChat() {
+  if (typeof io !== "function") {
+    setChatStatus("연결 실패", "error");
+    setChatEnabled(false, "채팅 모듈을 불러오지 못했습니다.");
+    return;
+  }
+
+  socket = io();
+
+  socket.on("connect", () => {
+    socket.emit("join-room", roomId);
+    setChatStatus("연결됨", "connected");
+    setChatEnabled(Boolean(currentUser));
+
+    if (!currentUser) {
+      appendSystemMessage("채팅을 이용하려면 로그인해주세요.");
+    }
+  });
+
+  socket.on("receive-message", (message) => {
+    appendChatMessage(message);
+  });
+
+  socket.on("chat-error", (error) => {
+    appendSystemMessage(error?.message || "메시지를 보내지 못했습니다.", true);
+  });
+
+  socket.on("disconnect", () => {
+    setChatStatus("재연결 중", "waiting");
+    setChatEnabled(false, "서버에 다시 연결하는 중입니다.");
+  });
+
+  socket.on("connect_error", () => {
+    setChatStatus("연결 실패", "error");
+    setChatEnabled(false, "채팅 서버에 연결할 수 없습니다.");
+  });
+}
+
+function setChatStatus(text, state) {
+  chatStatus.textContent = text;
+  chatStatus.dataset.state = state;
+}
+
+function setChatEnabled(enabled, placeholder = "의견을 입력하세요") {
+  messageInput.disabled = !enabled;
+  chatForm.querySelector('button[type="submit"]').disabled = !enabled;
+  messageInput.placeholder = enabled
+    ? "의견을 입력하세요"
+    : currentUser
+      ? placeholder
+      : "로그인 후 채팅할 수 있습니다.";
 }
 
 async function loadRoom() {
@@ -78,16 +146,78 @@ function renderVote(data) {
   });
 }
 
-document.querySelector("#chat-form").addEventListener("submit", (event) => {
+chatForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const input = document.querySelector("#message-input");
-  const text = input.value.trim();
+  const text = messageInput.value.trim();
+
+  if (!currentUser) {
+    appendSystemMessage("채팅을 이용하려면 로그인해주세요.", true);
+    return;
+  }
+
+  if (!socket?.connected) {
+    appendSystemMessage("채팅 서버에 연결하는 중입니다.", true);
+    return;
+  }
+
   if (!text) return;
-  const message = document.createElement("div");
-  message.className = "message";
-  message.innerHTML = `<span class="team-dot ${currentVote === "b" ? "red" : ""}"></span><div><strong>나</strong><p></p></div><time>방금</time>`;
-  message.querySelector("p").textContent = text;
-  document.querySelector("#messages").append(message);
-  message.scrollIntoView({ behavior: "smooth" });
-  input.value = "";
+
+  socket.emit("send-message", {
+    roomId,
+    userId: currentUser.id,
+    nickname: currentUser.nickname,
+    text,
+  });
+
+  messageInput.value = "";
 });
+
+function appendChatMessage(chatMessage) {
+  const isMine = String(chatMessage.userId) === String(currentUser?.id);
+  const message = document.createElement("div");
+  const teamClass = isMine
+    ? currentVote === "b"
+      ? "red"
+      : ""
+    : "neutral";
+
+  message.className = `message${isMine ? " is-mine" : ""}`;
+
+  const teamDot = document.createElement("span");
+  teamDot.className = `team-dot ${teamClass}`.trim();
+
+  const content = document.createElement("div");
+  const author = document.createElement("strong");
+  const text = document.createElement("p");
+  author.textContent = isMine ? "나" : chatMessage.nickname;
+  text.textContent = chatMessage.text;
+  content.append(author, text);
+
+  const time = document.createElement("time");
+  time.dateTime = chatMessage.createdAt;
+  time.textContent = formatMessageTime(chatMessage.createdAt);
+
+  message.append(teamDot, content, time);
+  messages.append(message);
+  message.scrollIntoView({ behavior: "smooth", block: "end" });
+}
+
+function appendSystemMessage(text, isError = false) {
+  const notice = document.createElement("div");
+  notice.className = `system-message${isError ? " is-error" : ""}`;
+  notice.textContent = text;
+  messages.append(notice);
+  notice.scrollIntoView({ behavior: "smooth", block: "end" });
+}
+
+function formatMessageTime(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return "방금";
+
+  return new Intl.DateTimeFormat("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date);
+}
