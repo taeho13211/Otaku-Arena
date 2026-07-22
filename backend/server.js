@@ -7,6 +7,7 @@ import morgan from "morgan";
 import { Server } from "socket.io";
 
 import roomRoutes from "./routes/roomRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,7 +20,7 @@ const io = new Server(httpServer);
 app.use(morgan("dev"));
 app.use(express.json());
 app.use("/api/rooms", roomRoutes);
-//ㅌ`app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
